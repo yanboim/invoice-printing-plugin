@@ -1,0 +1,485 @@
+:root {
+  --page-width: 210mm;
+  --page-height: 297mm;
+  --page-margin: 8mm;
+  --item-gap: 5mm;
+  --invoice-scale: 1;
+  --guide-color: rgba(28, 95, 156, 0.38);
+  --cut-line-color: #111827;
+  color-scheme: light;
+  font-family:
+    Inter, "Segoe UI", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+  background: #eef1f4;
+  color: #1f2933;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+}
+
+.panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  padding: 24px;
+  background: #ffffff;
+  border-right: 1px solid #d9dee5;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.brand p,
+.hint,
+#status {
+  color: #5d6875;
+  line-height: 1.55;
+}
+
+.brand p {
+  margin: 8px 0 22px;
+}
+
+.upload {
+  display: grid;
+  gap: 6px;
+  padding: 22px 18px;
+  border: 1.5px dashed #7b8fa6;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+
+.upload.dragging {
+  border-color: #1967a9;
+  background: #eef7ff;
+}
+
+.upload input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+}
+
+.upload-title {
+  font-weight: 700;
+}
+
+.upload-subtitle {
+  color: #637083;
+  font-size: 14px;
+}
+
+.control-group {
+  margin-top: 24px;
+  display: grid;
+  gap: 14px;
+}
+
+.control-group h2 {
+  margin: 0;
+  font-size: 15px;
+  color: #384656;
+}
+
+.control-group label {
+  display: grid;
+  gap: 8px;
+  color: #354252;
+  font-size: 14px;
+}
+
+.control-group label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+select,
+input[type="range"] {
+  width: 100%;
+}
+
+select {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #c8d0d9;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+input[type="range"] {
+  accent-color: #1f6fab;
+}
+
+.checkbox {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.checkbox input {
+  width: 16px;
+  height: 16px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+button {
+  min-height: 40px;
+  border: 1px solid #b7c1cf;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #243140;
+  cursor: pointer;
+}
+
+button:first-child {
+  border-color: #185f99;
+  background: #185f99;
+  color: #ffffff;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hint {
+  margin: 18px 0 0;
+  font-size: 13px;
+}
+
+.workspace {
+  min-width: 0;
+  padding: 22px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 0 auto 18px;
+  max-width: 1180px;
+}
+
+.toolbar strong,
+.toolbar span {
+  display: block;
+}
+
+.toolbar strong {
+  font-size: 18px;
+}
+
+.preview {
+  display: grid;
+  justify-content: center;
+  gap: 24px;
+  padding-bottom: 40px;
+}
+
+.preview.empty {
+  min-height: calc(100vh - 90px);
+  place-items: center;
+}
+
+.empty-state {
+  display: grid;
+  gap: 8px;
+  text-align: center;
+  color: #697584;
+}
+
+.empty-state strong {
+  color: #263343;
+  font-size: 20px;
+}
+
+.sheet {
+  position: relative;
+  width: var(--sheet-width, var(--page-width));
+  height: var(--sheet-height, var(--page-height));
+  display: grid;
+  gap: var(--item-gap);
+  padding: var(--page-margin);
+  background: #ffffff;
+  box-shadow: 0 10px 32px rgba(26, 38, 52, 0.18);
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+}
+
+.sheet.portrait {
+  --sheet-width: 210mm;
+  --sheet-height: 297mm;
+}
+
+.sheet.landscape {
+  --sheet-width: 297mm;
+  --sheet-height: 210mm;
+}
+
+.sheet:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+.sheet.layout-1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+.sheet.layout-2.portrait {
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.sheet.layout-2.landscape {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+}
+
+.sheet.layout-4 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.sheet.layout-6.landscape {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.sheet.layout-6.portrait {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.sheet::before,
+.sheet::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  display: none;
+  border-color: var(--cut-line-color);
+}
+
+.sheet.layout-2.portrait::before,
+.sheet.layout-4::before {
+  display: block;
+  left: var(--page-margin);
+  right: var(--page-margin);
+  top: 50%;
+  border-top: 1px dashed var(--cut-line-color);
+}
+
+.sheet.layout-2.landscape::after,
+.sheet.layout-4::after {
+  display: block;
+  top: var(--page-margin);
+  bottom: var(--page-margin);
+  left: 50%;
+  border-left: 1px dashed var(--cut-line-color);
+}
+
+.sheet.layout-6.landscape::before {
+  display: block;
+  left: var(--page-margin);
+  right: var(--page-margin);
+  top: 50%;
+  border-top: 1px dashed var(--cut-line-color);
+}
+
+.sheet.layout-6.landscape::after {
+  display: block;
+  top: var(--page-margin);
+  right: var(--page-margin);
+  bottom: var(--page-margin);
+  left: var(--page-margin);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      var(--cut-line-color) 0 4px,
+      transparent 4px 8px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--cut-line-color) 0 4px,
+      transparent 4px 8px
+    );
+  background-position:
+    33.333% 0,
+    66.666% 0;
+  background-repeat: no-repeat;
+  background-size:
+    1px 100%,
+    1px 100%;
+}
+
+.sheet.layout-6.portrait::before {
+  display: block;
+  top: var(--page-margin);
+  right: var(--page-margin);
+  bottom: var(--page-margin);
+  left: var(--page-margin);
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--cut-line-color) 0 4px,
+      transparent 4px 8px
+    ),
+    repeating-linear-gradient(
+      to right,
+      var(--cut-line-color) 0 4px,
+      transparent 4px 8px
+    );
+  background-position:
+    0 33.333%,
+    0 66.666%;
+  background-repeat: no-repeat;
+  background-size:
+    100% 1px,
+    100% 1px;
+}
+
+.sheet.layout-6.portrait::after {
+  display: block;
+  top: var(--page-margin);
+  bottom: var(--page-margin);
+  left: 50%;
+  border-left: 1px dashed var(--cut-line-color);
+}
+
+.preview.hide-crop-marks .sheet::before,
+.preview.hide-crop-marks .sheet::after {
+  display: none;
+}
+
+.invoice-frame {
+  margin: 0;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px dashed var(--guide-color);
+  background: #ffffff;
+}
+
+.preview.hide-guides .invoice-frame {
+  border-color: transparent;
+}
+
+.invoice-image {
+  width: calc(100% * var(--invoice-scale));
+  height: calc(100% * var(--invoice-scale));
+  object-fit: contain;
+  display: block;
+}
+
+.invoice-placeholder {
+  border-color: transparent;
+}
+
+.loading {
+  opacity: 0.65;
+}
+
+@media (max-width: 980px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid #d9dee5;
+  }
+
+  .workspace {
+    overflow-x: auto;
+  }
+}
+
+@media print {
+  :root {
+    background: #ffffff;
+  }
+
+  body {
+    margin: 0;
+    background: #ffffff;
+  }
+
+  .panel,
+  .toolbar,
+  .empty-state {
+    display: none !important;
+  }
+
+  .app,
+  .workspace,
+  .preview {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sheet {
+    width: var(--sheet-width, var(--page-width));
+    height: var(--sheet-height, var(--page-height));
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .sheet.portrait {
+    page: portrait-page;
+  }
+
+  .sheet.landscape {
+    page: landscape-page;
+  }
+}
+
+@page portrait-page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@page landscape-page {
+  size: A4 landscape;
+  margin: 0;
+}

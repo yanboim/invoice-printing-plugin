@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>发票 A4 排版打印</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+  </head>
+  <body>
+    <main class="app">
+      <aside class="panel" aria-label="打印设置">
+        <div class="brand">
+          <h1>发票排版打印</h1>
+          <p>上传发票、行程单或付款截图，统一缩放后排到 A4 页面中打印。</p>
+        </div>
+
+        <label class="upload" for="fileInput" id="dropZone">
+          <input
+            id="fileInput"
+            type="file"
+            accept="application/pdf,image/png,image/jpeg,image/webp,.pdf,.png,.jpg,.jpeg,.webp"
+            multiple
+          />
+          <span class="upload-title">选择发票、行程单或付款截图</span>
+          <span class="upload-subtitle">支持 PDF、PNG、JPG、WEBP，多选或拖拽到这里</span>
+        </label>
+
+        <section class="control-group">
+          <h2>排版</h2>
+          <label>
+            <span>每页数量</span>
+            <select id="layoutMode">
+              <option value="auto">自动</option>
+              <option value="1">1 张</option>
+              <option value="2">2 张</option>
+              <option value="4">4 张</option>
+              <option value="6">6 张</option>
+            </select>
+          </label>
+          <label>
+            <span>纸张方向</span>
+            <select id="orientation">
+              <option value="portrait">纵向 A4</option>
+              <option value="landscape" selected>横向 A4</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="control-group">
+          <h2>校准</h2>
+          <label>
+            <span>页面边距 <output id="marginValue">8 mm</output></span>
+            <input id="pageMargin" type="range" min="0" max="20" value="8" />
+          </label>
+          <label>
+            <span>发票间距 <output id="gapValue">5 mm</output></span>
+            <input id="itemGap" type="range" min="0" max="20" value="5" />
+          </label>
+          <label>
+            <span>整体缩放 <output id="scaleValue">100%</output></span>
+            <input id="invoiceScale" type="range" min="50" max="100" value="100" />
+          </label>
+          <label class="checkbox">
+            <input id="showGuides" type="checkbox" checked />
+            <span>显示票据框边界</span>
+          </label>
+          <label class="checkbox">
+            <input id="showCropMarks" type="checkbox" checked />
+            <span>显示发票间裁剪线</span>
+          </label>
+        </section>
+
+        <div class="actions">
+          <button id="printButton" type="button" disabled>打印</button>
+          <button id="clearButton" type="button" disabled>清空</button>
+        </div>
+
+        <p class="hint">
+          打印窗口中建议关闭页眉页脚，并把缩放设为 100%，以保证 A4 尺寸准确。
+        </p>
+      </aside>
+
+      <section class="workspace" aria-label="A4 预览">
+        <div class="toolbar">
+          <div>
+            <strong id="summary">尚未上传发票</strong>
+            <span id="status">请选择 PDF 或图片文件开始排版。</span>
+          </div>
+        </div>
+        <div id="preview" class="preview empty">
+          <div class="empty-state">
+            <strong>等待 PDF 或图片发票</strong>
+            <span>上传后会在这里生成 A4 打印预览。</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
