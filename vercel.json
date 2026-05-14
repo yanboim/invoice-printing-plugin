@@ -1,4 +1,17 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.invoice-printing.vercel.app"
+        }
+      ],
+      "destination": "https://invoice-printing.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
 }
