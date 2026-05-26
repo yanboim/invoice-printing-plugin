@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "发票 A4 排版打印",
+  "version": "1.0.0",
+  "description": "上传发票、行程单或付款截图，统一缩放后排到 A4 页面中打印。",
+  "permissions": [],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {},
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

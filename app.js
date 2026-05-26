@@ -1,9 +1,8 @@
 const pdfjsLib = window.pdfjsLib;
-const pdfAssetBase = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174";
-const pdfWorkerSrc =
-  `${pdfAssetBase}/build/pdf.worker.min.js`;
-const pdfCMapUrl = `${pdfAssetBase}/cmaps/`;
-const pdfStandardFontDataUrl = `${pdfAssetBase}/standard_fonts/`;
+const pdfAssetBase = chrome?.runtime?.getURL("") || ".";
+const pdfWorkerSrc = `${pdfAssetBase}lib/pdf.worker.min.js`;
+const pdfCMapUrl = `${pdfAssetBase}lib/cmaps/`;
+const pdfStandardFontDataUrl = `${pdfAssetBase}lib/standard_fonts/`;
 
 if (pdfjsLib) {
   pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
@@ -409,7 +408,15 @@ function createSheet(invoices, perSheet, orientation) {
 function createEmptyState() {
   const wrapper = document.createElement("div");
   wrapper.className = "empty-state";
-  wrapper.innerHTML = "<strong>等待 PDF 或图片发票</strong><span>上传后会在这里生成 A4 打印预览。</span>";
+
+  const title = document.createElement("strong");
+  title.textContent = "等待 PDF 或图片发票";
+
+  const subtitle = document.createElement("span");
+  subtitle.textContent = "上传后会在这里生成 A4 打印预览。";
+
+  wrapper.appendChild(title);
+  wrapper.appendChild(subtitle);
   return wrapper;
 }
 
@@ -440,7 +447,7 @@ function ensurePdfRenderer() {
     return;
   }
 
-  setStatus("PDF 渲染库加载失败，仍可上传图片；如需处理 PDF，请检查网络后刷新页面。");
+  setStatus("PDF 渲染库加载失败，仍可上传图片；如需处理 PDF，请尝试重新加载插件。");
 }
 
 function isSupportedFile(file) {
